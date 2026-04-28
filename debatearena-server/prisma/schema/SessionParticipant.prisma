@@ -1,0 +1,32 @@
+/// The two debaters in a session.
+model SessionParticipant {
+  id                  String          @id @default(uuid())
+  sessionId           String          @map("session_id")
+  userId              String          @map("user_id")
+  role                ParticipantRole
+  stance              String          @db.Text
+  isAnonymous         Boolean         @default(false) @map("is_anonymous")
+  isReady             Boolean         @default(false) @map("is_ready")
+  extensionsUsed      Int             @default(0) @map("extensions_used")
+  factChecksUsed      Int             @default(0) @map("fact_checks_used")
+  researchQueriesUsed Int             @default(0) @map("research_queries_used")
+  conceded            Boolean         @default(false)
+  disconnected        Boolean         @default(false)
+  eloBefore           Int?            @map("elo_before")
+  eloAfter            Int?            @map("elo_after")
+  eloChange           Int?            @map("elo_change")
+  joinedAt            DateTime        @default(now()) @map("joined_at")
+
+  session              Session         @relation(fields: [sessionId], references: [id])
+  user                 User            @relation(fields: [userId], references: [id])
+  activeRounds         DebateRound[]   @relation("ActiveParticipant")
+  messages             Message[]
+  factCheckRequests    FactCheck[]
+  researchRequests     ResearchQuery[]
+  verdictsWon          Verdict[]       @relation("Winner")
+  verdictScores        VerdictScore[]
+  votesReceived        ObserverVote[]  @relation("VoteTarget")
+
+  @@unique([sessionId, userId])
+  @@map("session_participants")
+}

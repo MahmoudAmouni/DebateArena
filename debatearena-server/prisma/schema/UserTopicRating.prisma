@@ -1,0 +1,17 @@
+/// Separate ELO rating per user per category.
+model UserTopicRating {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  categoryId   String   @map("category_id")
+  elo          Int      @default(1000)
+  wins         Int      @default(0)
+  losses       Int      @default(0)
+  ties         Int      @default(0)
+  debatesCount Int      @default(0) @map("debates_count")
+
+  user         User     @relation(fields: [userId], references: [id])
+  category     Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([userId, categoryId])
+  @@map("user_topic_ratings")
+}

@@ -1,0 +1,16 @@
+/// The AI judge's final verdict for a session.
+model Verdict {
+  id                  String             @id @default(uuid())
+  sessionId           String             @unique @map("session_id")
+  winnerParticipantId String?            @map("winner_participant_id")
+  isTie               Boolean            @default(false) @map("is_tie")
+  summary             String             @db.Text
+  processingMs        Int?               @map("processing_ms")
+  generatedAt         DateTime           @default(now()) @map("generated_at")
+
+  session Session             @relation(fields: [sessionId], references: [id])
+  winner  SessionParticipant? @relation("Winner", fields: [winnerParticipantId], references: [id])
+  scores  VerdictScore[]
+
+  @@map("verdicts")
+}

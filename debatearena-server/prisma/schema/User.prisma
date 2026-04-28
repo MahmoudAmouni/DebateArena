@@ -1,0 +1,41 @@
+/// Stores every registered account and their global statistics.
+model User {
+  id                String               @id @default(uuid())
+  username          String               @unique @db.VarChar(50)
+  email             String               @unique @db.VarChar(255)
+  passwordHash      String?              @map("password_hash") @db.VarChar(255)
+  oauthProvider     String?              @map("oauth_provider") @db.VarChar(20)
+  oauthId           String?              @map("oauth_id") @db.VarChar(255)
+  avatarUrl         String?              @map("avatar_url") @db.Text
+  bio               String?              @db.VarChar(300)
+  globalElo         Int                  @default(1000) @map("global_elo")
+  totalWins         Int                  @default(0) @map("total_wins")
+  totalLosses       Int                  @default(0) @map("total_losses")
+  totalTies         Int                  @default(0) @map("total_ties")
+  factCheckAccuracy Decimal?             @map("fact_check_accuracy") @db.Decimal(5, 2)
+  isBanned          Boolean              @default(false) @map("is_banned")
+  banExpiresAt      DateTime?            @map("ban_expires_at")
+  warningCount      Int                  @default(0) @map("warning_count")
+  isVerified        Boolean              @default(false) @map("is_verified")
+  ageConfirmed      Boolean              @default(false) @map("age_confirmed")
+  createdAt         DateTime             @default(now()) @map("created_at")
+  lastActiveAt      DateTime?            @map("last_active_at")
+
+  // Relations
+  topicRatings        UserTopicRating[]
+  createdSessions     Session[]            @relation("CreatedSessions")
+  sessionParticipants SessionParticipant[]
+  observerSessions    SessionObserver[]
+  sentChallenges      Challenge[]          @relation("SentChallenges")
+  receivedChallenges  Challenge[]          @relation("ReceivedChallenges")
+  notifications       Notification[]
+  reportsSubmitted    Report[]             @relation("Reporter")
+  reportsReceived     Report[]             @relation("ReportedUser")
+  reviewedReports     Report[]             @relation("Reviewer")
+  blockedBy           Block[]              @relation("Blocker")
+  blockedUsers        Block[]              @relation("BlockedUser")
+  badges              UserBadge[]
+  consentLogs         ConsentLog[]
+
+  @@map("users")
+}

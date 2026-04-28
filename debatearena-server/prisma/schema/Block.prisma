@@ -1,0 +1,14 @@
+/// User block relationships.
+model Block {
+  id          String   @id @default(uuid())
+  blockerId   String   @map("blocker_id")
+  blockedId   String   @map("blocked_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  blocker     User     @relation("Blocker", fields: [blockerId], references: [id])
+  blockedUser User     @relation("BlockedUser", fields: [blockedId], references: [id])
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@map("blocks")
+}

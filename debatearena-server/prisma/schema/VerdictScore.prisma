@@ -1,0 +1,16 @@
+/// Detailed scores for each participant across criteria.
+model VerdictScore {
+  id            String             @id @default(uuid())
+  verdictId     String             @map("verdict_id")
+  participantId String             @map("participant_id")
+  criterion     Criterion
+  score         Decimal            @db.Decimal(4, 1)
+  explanation   String?            @db.Text
+
+  verdict     Verdict            @relation(fields: [verdictId], references: [id])
+  participant SessionParticipant @relation(fields: [participantId], references: [id])
+
+  @@unique([verdictId, participantId, criterion])
+  @@index([verdictId])
+  @@map("verdict_scores")
+}

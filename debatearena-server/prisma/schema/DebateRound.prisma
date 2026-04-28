@@ -1,0 +1,19 @@
+/// Each round within a session.
+model DebateRound {
+  id                  String              @id @default(uuid())
+  sessionId           String              @map("session_id")
+  roundNumber         Int                 @map("round_number")
+  roundType           RoundType           @map("round_type")
+  status              RoundStatus         @default(pending)
+  activeParticipantId String?             @map("active_participant_id")
+  turnDurationSeconds Int                 @map("turn_duration_seconds")
+  startedAt           DateTime?           @map("started_at")
+  endedAt             DateTime?           @map("ended_at")
+  timedOut            Boolean             @default(false) @map("timed_out")
+
+  session           Session             @relation(fields: [sessionId], references: [id])
+  activeParticipant SessionParticipant? @relation("ActiveParticipant", fields: [activeParticipantId], references: [id])
+  messages          Message[]
+
+  @@map("debate_rounds")
+}

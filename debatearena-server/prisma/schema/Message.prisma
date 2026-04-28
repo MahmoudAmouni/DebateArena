@@ -1,0 +1,21 @@
+/// Individual messages sent during a debate round.
+model Message {
+  id            String             @id @default(uuid())
+  sessionId     String             @map("session_id")
+  roundId       String             @map("round_id")
+  participantId String             @map("participant_id")
+  content       String             @db.Text
+  wordCount     Int                @map("word_count")
+  isFlagged     Boolean            @default(false) @map("is_flagged")
+  flaggedReason String?            @map("flagged_reason") @db.VarChar(100)
+  sentAt        DateTime           @default(now()) @map("sent_at")
+
+  session     Session            @relation(fields: [sessionId], references: [id])
+  round       DebateRound        @relation(fields: [roundId], references: [id])
+  participant SessionParticipant @relation(fields: [participantId], references: [id])
+  factChecks  FactCheck[]
+  reports     Report[]
+
+  @@index([sessionId, sentAt])
+  @@map("messages")
+}

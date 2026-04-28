@@ -1,0 +1,96 @@
+enum SessionStatus {
+  open
+  active
+  completed
+  expired
+  cancelled
+}
+
+enum SessionFormat {
+  quick
+  standard
+  extended
+}
+
+enum SessionVisibility {
+  public
+  invite_only
+}
+
+enum ParticipantRole {
+  creator
+  joiner
+}
+
+enum RoundType {
+  opening
+  rebuttal
+  closing
+}
+
+enum RoundStatus {
+  pending
+  active
+  completed
+}
+
+enum EndReason {
+  completed
+  conceded
+  timeout
+  disconnect
+  cancelled
+}
+
+enum FactCheckVerdict {
+  supported
+  disputed
+  unverifiable
+}
+
+enum Criterion {
+  clarity
+  logic
+  evidence
+  responsiveness
+  consistency
+}
+
+enum ChallengeStatus {
+  pending
+  accepted
+  declined
+  expired
+}
+
+enum NotificationType {
+  session_joined
+  challenge_received
+  verdict_ready
+  session_expiring
+  debate_starting
+  warning_issued
+  account_suspended
+}
+
+enum ReportReason {
+  hate_speech
+  harassment
+  threats
+  spam
+  banned_topic
+  other
+}
+
+enum ReportStatus {
+  pending
+  reviewed
+  actioned
+  dismissed
+}
+
+enum ConsentType {
+  ai_transcription
+  data_processing
+  marketing
+}
