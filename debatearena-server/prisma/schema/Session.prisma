@@ -1,0 +1,45 @@
+/// A debate session — from creation to close.
+model Session {
+  id             String            @id @default(uuid())
+  creatorId      String            @map("creator_id")
+  categoryId     String            @map("category_id")
+  title          String            @db.VarChar(120)
+  description    String?           @db.Text
+  creatorStance  String            @map("creator_stance") @db.Text
+  format         SessionFormat
+  totalRounds    Int               @map("total_rounds")
+  visibility     SessionVisibility
+  inviteCode     String?           @unique @map("invite_code") @db.VarChar(16)
+  status         SessionStatus     @default(open)
+  isRanked       Boolean           @default(true) @map("is_ranked")
+  allowObservers Boolean           @default(true) @map("allow_observers")
+  observerCount  Int               @default(0) @map("observer_count")
+  scheduledAt    DateTime?         @map("scheduled_at")
+  expiresAt      DateTime          @map("expires_at")
+  startedAt      DateTime?         @map("started_at")
+  endedAt        DateTime?         @map("ended_at")
+  endReason      EndReason?        @map("end_reason")
+  aiScreened     Boolean           @default(false) @map("ai_screened")
+  flagged        Boolean           @default(false)
+  createdAt      DateTime          @default(now()) @map("created_at")
+
+  creator           User                 @relation("CreatedSessions", fields: [creatorId], references: [id])
+  category          Category             @relation(fields: [categoryId], references: [id])
+  participants      SessionParticipant[]
+  observers         SessionObserver[]
+  rounds            DebateRound[]
+  messages          Message[]
+  factChecks        FactCheck[]
+  researchQueries   ResearchQuery[]
+  verdict           Verdict?
+  votes             ObserverVote[]
+  challenges        Challenge[]
+  reports           Report[]
+  consentLogs       ConsentLog[]
+
+  @@index([status, createdAt])
+  @@index([categoryId, status])
+  @@index([creatorId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
