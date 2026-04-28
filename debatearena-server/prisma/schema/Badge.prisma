@@ -1,0 +1,12 @@
+/// Master list of all achievable badges.
+model Badge {
+  id          String      @id @default(uuid())
+  slug        String      @unique @db.VarChar(50)
+  name        String      @db.VarChar(100)
+  description String      @db.Text
+  iconUrl     String?     @map("icon_url") @db.Text
+
+  users       UserBadge[]
+
+  @@map("badges")
+}
