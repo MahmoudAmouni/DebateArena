@@ -1,0 +1,13 @@
+/// Predefined topic categories.
+model Category {
+  id           String            @id @default(uuid())
+  name         String            @unique @db.VarChar(50)
+  slug         String            @unique @db.VarChar(50)
+  isActive     Boolean           @default(true) @map("is_active")
+
+  topicRatings UserTopicRating[]
+  sessions     Session[]
+  challenges   Challenge[]
+
+  @@map("categories")
+}
