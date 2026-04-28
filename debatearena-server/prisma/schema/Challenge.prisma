@@ -1,0 +1,23 @@
+/// Direct challenges between users.
+model Challenge {
+  id               String          @id @default(uuid())
+  challengerId     String          @map("challenger_id")
+  challengedId     String          @map("challenged_id")
+  topic            String          @db.VarChar(120)
+  challengerStance String          @map("challenger_stance") @db.Text
+  categoryId       String          @map("category_id")
+  message          String?         @db.Text
+  status           ChallengeStatus @default(pending)
+  sessionId        String?         @map("session_id")
+  expiresAt        DateTime        @map("expires_at")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  respondedAt      DateTime?       @map("responded_at")
+
+  challenger User     @relation("SentChallenges", fields: [challengerId], references: [id])
+  challenged User     @relation("ReceivedChallenges", fields: [challengedId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+  session    Session? @relation(fields: [sessionId], references: [id])
+
+  @@index([challengedId, status])
+  @@map("challenges")
+}
