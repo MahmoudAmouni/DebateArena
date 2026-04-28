@@ -1,0 +1,22 @@
+/// Moderation reports.
+model Report {
+  id             String       @id @default(uuid())
+  reporterId     String       @map("reporter_id")
+  reportedUserId String       @map("reported_user_id")
+  sessionId      String?      @map("session_id")
+  messageId      String?      @map("message_id")
+  reason         ReportReason
+  details        String?      @db.Text
+  status         ReportStatus @default(pending)
+  reviewedBy     String?      @map("reviewed_by")
+  reviewedAt     DateTime?    @map("reviewed_at")
+  createdAt     DateTime     @default(now()) @map("created_at")
+
+  reporter     User     @relation("Reporter", fields: [reporterId], references: [id])
+  reportedUser User     @relation("ReportedUser", fields: [reportedUserId], references: [id])
+  session      Session? @relation(fields: [sessionId], references: [id])
+  message      Message? @relation(fields: [messageId], references: [id])
+  reviewer     User?    @relation("Reviewer", fields: [reviewedBy], references: [id])
+
+  @@map("reports")
+}
