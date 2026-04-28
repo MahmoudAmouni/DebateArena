@@ -1,0 +1,16 @@
+/// Mid-debate votes by spectators.
+model ObserverVote {
+  id                    String             @id @default(uuid())
+  sessionId             String             @map("session_id")
+  observerId            String             @map("observer_id")
+  votedForParticipantId String             @map("voted_for_participant_id")
+  votedAt               DateTime           @default(now()) @map("voted_at")
+
+  session     Session            @relation(fields: [sessionId], references: [id])
+  observer    SessionObserver    @relation(fields: [observerId], references: [id])
+  participant SessionParticipant @relation("VoteTarget", fields: [votedForParticipantId], references: [id])
+
+  @@unique([sessionId, observerId])
+  @@index([sessionId])
+  @@map("observer_votes")
+}
