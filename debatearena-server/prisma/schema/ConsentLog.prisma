@@ -1,0 +1,16 @@
+/// Audit trail of user consent actions for privacy compliance.
+model ConsentLog {
+  id          String      @id @default(uuid())
+  userId      String      @map("user_id")
+  consentType ConsentType @map("consent_type")
+  granted     Boolean
+  sessionId   String?     @map("session_id")
+  ipAddress   String      @map("ip_address") @db.VarChar(45)
+  userAgent   String?     @map("user_agent") @db.Text
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  user        User        @relation(fields: [userId], references: [id])
+  session     Session?    @relation(fields: [sessionId], references: [id])
+
+  @@map("consent_logs")
+}
