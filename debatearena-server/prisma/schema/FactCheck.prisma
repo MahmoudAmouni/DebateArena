@@ -1,0 +1,21 @@
+/// On-demand fact-check request during a debate.
+model FactCheck {
+  id           String            @id @default(uuid())
+  sessionId    String            @map("session_id")
+  requestedBy  String            @map("requested_by")
+  messageId    String?           @map("message_id")
+  claimText    String            @map("claim_text") @db.Text
+  verdict      FactCheckVerdict?
+  explanation  String?           @db.Text
+  sources      Json?
+  processingMs Int?              @map("processing_ms")
+  requestedAt  DateTime          @default(now()) @map("requested_at")
+  completedAt  DateTime?         @map("completed_at")
+
+  session   Session            @relation(fields: [sessionId], references: [id])
+  requester SessionParticipant @relation(fields: [requestedBy], references: [id])
+  message   Message?           @relation(fields: [messageId], references: [id])
+
+  @@index([sessionId])
+  @@map("fact_checks")
+}
