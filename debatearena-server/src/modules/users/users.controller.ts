@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { UsersRepository } from './users.repository';
+import { UsersService } from './users.service';
 import { sendSuccess } from '../../utils/apiResponse';
-import { NotFoundError, UnauthorizedError } from '../../utils/errors';
+import { UnauthorizedError } from '../../utils/errors';
 
 export class UsersController {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(private usersService: UsersService) {}
 
   getMe = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -13,14 +13,9 @@ export class UsersController {
         throw new UnauthorizedError('Authentication required');
       }
 
-      const user = await this.usersRepository.findById(userId);
-      if (!user) {
-        throw new NotFoundError('User not found', 'USER_NOT_FOUND');
-      }
+      const profile = await this.usersService.getOwnProfile(userId);
 
-      const { passwordHash, ...userWithoutPassword } = user;
-
-      return sendSuccess(res, { user: userWithoutPassword });
+      return sendSuccess(res, { user: profile });
     } catch (error) {
       next(error);
     }
