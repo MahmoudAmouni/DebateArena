@@ -31,11 +31,12 @@ export class DebatesRepository {
     });
   }
 
-  async getTranscript(sessionId: string): Promise<Message[]> {
+  async getTranscript(sessionId: string) {
     return prisma.message.findMany({
       where: { sessionId },
       orderBy: { sentAt: 'asc' },
       include: {
+        round: true,
         participant: {
           include: {
             user: { select: { username: true, avatarUrl: true } }
