@@ -1,6 +1,7 @@
 enum SessionStatus {
   open
   active
+  writing
   completed
   expired
   cancelled
