@@ -1,49 +1,28 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from './auth.service';
-import { UsersRepository } from '../users/users.repository';
 import { sendSuccess } from '../../utils/apiResponse';
-import { BadRequestError, UnauthorizedError } from '../../utils/errors';
+import { UnauthorizedError } from '../../utils/errors';
 
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private usersRepository: UsersRepository
-  ) {}
+  constructor(private authService: AuthService) {}
+
+  private setRefreshCookie(res: Response, token: string) {
+    res.cookie('refreshToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000 
+    });
+  }
 
   register = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { username, email, password, ageConfirmed } = req.body;
-
-      const [existingUser, existingUsername] = await Promise.all([
-        this.usersRepository.findByEmail(email),
-        this.usersRepository.findByUsername(username),
-      ]);
-
-      if (existingUser) {
-        throw new BadRequestError('Email already in use', 'EMAIL_EXISTS');
-      }
-
-      if (existingUsername) {
-        throw new BadRequestError('Username already taken', 'USERNAME_EXISTS');
-      }
-
-      const passwordHash = await this.authService.hashPassword(password);
-
-      const user = await this.usersRepository.create({
-        username,
-        email,
-        passwordHash,
-        ageConfirmed,
-      });
-
-      const { accessToken, refreshToken } = this.authService.generateTokens(user);
+      const { user, accessToken, refreshToken } = await this.authService.register(req.body);
+      
+      this.setRefreshCookie(res, refreshToken);
 
       return sendSuccess(res, {
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-        },
+        user: { id: user.id, username: user.username, email: user.email },
         accessToken,
         refreshToken,
       }, 201);
@@ -55,28 +34,48 @@ export class AuthController {
   login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;
+      const { user, accessToken, refreshToken } = await this.authService.login(email, password);
 
-      const user = await this.usersRepository.findByEmail(email);
-      if (!user || !user.passwordHash) {
-        throw new UnauthorizedError('Invalid email or password', 'INVALID_CREDENTIALS');
-      }
-
-      const isPasswordValid = await this.authService.comparePassword(password, user.passwordHash);
-      if (!isPasswordValid) {
-        throw new UnauthorizedError('Invalid email or password', 'INVALID_CREDENTIALS');
-      }
-
-      const { accessToken, refreshToken } = this.authService.generateTokens(user);
+      this.setRefreshCookie(res, refreshToken);
 
       return sendSuccess(res, {
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-        },
+        user: { id: user.id, username: user.username, email: user.email },
         accessToken,
         refreshToken,
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  refreshTokens = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const token = req.cookies?.refreshToken || req.body?.refreshToken;
+      if (!token) {
+        throw new UnauthorizedError('Refresh token is required', 'TOKEN_REQUIRED');
+      }
+
+      const { accessToken, refreshToken } = await this.authService.refreshTokens(token);
+      
+      this.setRefreshCookie(res, refreshToken);
+
+      return sendSuccess(res, {
+        accessToken,
+        refreshToken,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  logout = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user?.id;
+      if (userId) {
+        await this.authService.logout(userId);
+      }
+      res.clearCookie('refreshToken');
+      return sendSuccess(res, { message: 'Logged out successfully' });
     } catch (error) {
       next(error);
     }

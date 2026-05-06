@@ -4,6 +4,7 @@ model Session {
   creatorId      String            @map("creator_id")
   categoryId     String            @map("category_id")
   title          String            @db.VarChar(120)
+  questions      Json
   description    String?           @db.Text
   creatorStance  String            @map("creator_stance") @db.Text
   format         SessionFormat
