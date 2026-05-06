@@ -2,17 +2,10 @@ import { DebatesRepository } from './debates.repository';
 import { SessionsRepository } from '../sessions/sessions.repository';
 import { ForbiddenError, NotFoundError, ConflictError } from '../../utils/errors';
 import { env } from '../../config/env';
-import { Queue } from 'bullmq';
+import { verdictQueue } from '../../queues';
 import { GoogleGenAI } from '@google/genai';
 import prisma from '../../config/database';
 import { EndReason } from '@prisma/client';
-
-export const verdictQueue = new Queue('verdictJobs', {
-  connection: {
-    host: new URL(env.REDIS_URL).hostname,
-    port: parseInt(new URL(env.REDIS_URL).port || '6379')
-  }
-});
 
 const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
 
@@ -101,6 +94,57 @@ export class DebatesService {
     }
 
     return nextRound;
+  }
+
+  async batchSubmit(userId: string, sessionId: string, answers: { roundNumber: number; content: string }[]) {
+    const session = await this.sessionsRepository.findById(sessionId);
+    if (!session) throw new NotFoundError('Session not found', 'SESSION_NOT_FOUND');
+    if ((session.status as string) !== 'writing') {
+      throw new ConflictError('You can only submit during the writing phase', 'NOT_IN_WRITING_PHASE');
+    }
+
+    const participant = await this.debatesRepository.findParticipant(sessionId, userId);
+    if (!participant) throw new ForbiddenError('Not a participant', 'NOT_PARTICIPANT');
+
+    const existingMessages = await prisma.message.findFirst({
+      where: { participantId: participant.id, sessionId }
+    });
+    if (existingMessages) throw new ConflictError('You have already submitted your answers', 'ALREADY_SUBMITTED');
+
+    const rounds = await prisma.debateRound.findMany({
+      where: { sessionId },
+      orderBy: { roundNumber: 'asc' }
+    });
+
+    const messageData = answers.map((answer) => {
+      const round = rounds.find(r => r.roundNumber === answer.roundNumber);
+      if (!round) throw new NotFoundError(`Round ${answer.roundNumber} not found`, 'ROUND_NOT_FOUND');
+      
+      return {
+        sessionId,
+        roundId: round.id,
+        participantId: participant.id,
+        content: answer.content,
+        wordCount: answer.content.trim().split(/\s+/).length,
+      };
+    });
+
+    await prisma.message.createMany({ data: messageData });
+
+    const participants = await prisma.sessionParticipant.findMany({
+      where: { sessionId }
+    });
+    
+    const submissionsCount = await prisma.message.groupBy({
+      by: ['participantId'],
+      where: { sessionId }
+    });
+
+    if (submissionsCount.length === 2) {
+      await this.endDebate(sessionId, 'completed');
+    }
+
+    return { success: true };
   }
 
   async endDebate(sessionId: string, reason: EndReason) {
