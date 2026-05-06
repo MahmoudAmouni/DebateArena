@@ -47,3 +47,17 @@ export const requestExtension = async (req: Request, res: Response, next: NextFu
     next(error);
   }
 };
+
+export const batchSubmit = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionId = req.params.sessionId as string;
+    const userId = req.user!.id as string;
+    const { answers } = req.body;
+    
+    const result = await debatesService.batchSubmit(userId, sessionId, answers);
+    
+    return sendSuccess(res, result);
+  } catch (error) {
+    next(error);
+  }
+};
