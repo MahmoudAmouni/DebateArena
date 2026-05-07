@@ -1,13 +1,10 @@
-import { GoogleGenAI } from '@google/genai';
-import { SessionsRepository } from './sessions.repository';
+import { SessionsRepository, sessionsRepository } from './sessions.repository';
 import { generateInviteCode } from '../../utils/inviteCode';
 import { ForbiddenError, NotFoundError, ConflictError } from '../../utils/errors';
 import prisma from '../../config/database';
 import { SessionFormat, SessionVisibility } from '@prisma/client';
-import { env } from '../../config/env';
 import { sessionExpiryQueue, debatePhaseQueue } from '../../queues';
-
-const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+import { callGroq } from '../../utils/ai';
 
 export class SessionsService {
   constructor(private sessionsRepository: SessionsRepository) {}
@@ -20,12 +17,7 @@ export class SessionsService {
       
       Topic: "${title}"`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-      });
-
-      const text = response.text || '';
+      const text = await callGroq(prompt, true);
       const jsonMatch = text.match(/\{.*\}/s);
       
       if (jsonMatch) {
@@ -134,10 +126,9 @@ export class SessionsService {
       await this.sessionsRepository.setStartedAt(sessionId);
       await this.createRoundsForSession(sessionId, participants);
       
-      // Schedule transition to writing phase after 30 minutes (1800000 ms)
       await debatePhaseQueue.add('transitionToWriting', 
         { sessionId, nextPhase: 'writing' }, 
-        { delay: 1800000 } 
+        { delay: 10000 } 
       );
       
       return { status: 'active' };
@@ -165,3 +156,5 @@ export class SessionsService {
     });
   }
 }
+
+export const sessionsService = new SessionsService(sessionsRepository);
