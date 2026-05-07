@@ -1,4 +1,4 @@
-# DebateArena — Project Description
+ DebateArena — Project Description
 
 ---
 
