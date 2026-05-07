@@ -10,10 +10,11 @@ const envSchema = z.object({
   REDIS_URL: z.string().url().default('redis://localhost:6379'),
   JWT_ACCESS_SECRET: z.string().min(1),
   JWT_REFRESH_SECRET: z.string().min(1),
-  JWT_ACCESS_EXPIRES: z.string().default('15m'),
+  JWT_ACCESS_EXPIRES: z.string().default('10d'),
   JWT_REFRESH_EXPIRES: z.string().default('30d'),
   CLIENT_URL: z.string().url().default('http://localhost:5173'),
   GEMINI_API_KEY: z.string().min(1),
+  GROQ_API_KEY: z.string().min(1),
 });
 
 const _env = envSchema.safeParse(process.env);
