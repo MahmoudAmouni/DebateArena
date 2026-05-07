@@ -1,13 +1,10 @@
 import { DebatesRepository } from './debates.repository';
 import { SessionsRepository } from '../sessions/sessions.repository';
 import { ForbiddenError, NotFoundError, ConflictError } from '../../utils/errors';
-import { env } from '../../config/env';
 import { verdictQueue } from '../../queues';
-import { GoogleGenAI } from '@google/genai';
 import prisma from '../../config/database';
 import { EndReason } from '@prisma/client';
-
-const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+import { callGroq } from '../../utils/ai';
 
 export class DebatesService {
   constructor(
@@ -34,12 +31,7 @@ export class DebatesService {
       Respond ONLY with valid JSON: {"flagged": boolean}.
       Message: "${content}"`;
       
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-      });
-
-      const text = response.text || '';
+      const text = await callGroq(prompt, true);
       const match = text.match(/\{.*\}/s);
       if (match) {
         const result = JSON.parse(match[0]);
@@ -131,10 +123,6 @@ export class DebatesService {
 
     await prisma.message.createMany({ data: messageData });
 
-    const participants = await prisma.sessionParticipant.findMany({
-      where: { sessionId }
-    });
-    
     const submissionsCount = await prisma.message.groupBy({
       by: ['participantId'],
       where: { sessionId }

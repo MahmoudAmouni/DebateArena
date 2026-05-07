@@ -118,3 +118,5 @@ export class SessionsRepository {
     });
   }
 }
+
+export const sessionsRepository = new SessionsRepository();
