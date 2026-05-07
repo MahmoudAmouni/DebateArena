@@ -2,13 +2,12 @@ import { Worker, Job } from 'bullmq';
 import { env } from '../config/env';
 import { VerdictsRepository } from '../modules/verdicts/verdicts.repository';
 import { DebatesRepository } from '../modules/debates/debates.repository';
-import { GoogleGenAI } from '@google/genai';
 import { io } from '../server';
 import { eloQueue, badgeQueue } from '../queues';
 import logger from '../config/logger';
 import { Criterion } from '@prisma/client';
+import { callGroq } from '../utils/ai';
 
-const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
 const verdictsRepository = new VerdictsRepository();
 const debatesRepository = new DebatesRepository();
 
@@ -84,13 +83,8 @@ export const verdictWorker = new Worker('verdictJobs', async (job: Job) => {
       }
     `;
 
-    const result = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
-      contents: prompt,
-      config: { responseMimeType: 'application/json' }
-    });
-
-    const aiData = JSON.parse(result.text!);
+    const text = await callGroq(prompt, true);
+    const aiData = JSON.parse(text);
 
     let finalWinnerId = aiData.winnerId;
     let finalIsTie = aiData.isTie;
