@@ -10,10 +10,37 @@ export interface User {
   email: string;
   avatarUrl?: string;
   globalElo: number;
+  totalWins: number;
+  totalLosses: number;
+  totalTies: number;
   bio?: string;
+  topicRatings?: TopicRating[];
+  badges?: UserBadge[];
   createdAt: string;
   updatedAt: string;
 }
+
+export interface TopicRating {
+  id: string;
+  userId: string;
+  categoryId: string;
+  elo: number;
+  category?: Category;
+}
+
+export interface UserBadge {
+  id: string;
+  userId: string;
+  badgeId: string;
+  awardedAt: string;
+  badge?: {
+    id: string;
+    name: string;
+    description: string;
+    icon?: string;
+  };
+}
+
 
 // --- Session & Debate Types ---
 export type DebatePhase = 'lobby' | 'phase1' | 'phase2' | 'completed';
@@ -48,6 +75,8 @@ export interface Participant {
   role: 'creator' | 'joiner';
   stance: string;
   isReady: boolean;
+  eloChange?: number;
+  joinedAt: string;
   user?: User;
 }
 
@@ -93,3 +122,31 @@ export interface ApiResponse<T> {
     message: string;
   };
 }
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  nextCursor: string | null;
+}
+
+export interface LeaderboardResponse {
+  data: User[];
+  nextCursor: string | null;
+}
+
+export interface SessionFeedResponse {
+  sessions: (Session & { 
+    _count?: { observers: number },
+    participants: (Participant & { user: User })[]
+  })[];
+  nextCursor: string | null;
+}
+
+export interface DebateHistoryItem extends Participant {
+  session: Session & {
+    category: Category;
+    verdict?: Verdict & {
+      winner?: Participant & { user: { username: string } }
+    }
+  };
+}
+
