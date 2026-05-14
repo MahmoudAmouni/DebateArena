@@ -1,139 +1,85 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import styles from './AIJudgeSection.module.css';
 
 const criteria = [
-  { label: 'Clarity & Structure', score: 8.5 },
-  { label: 'Logical Consistency', score: 9.2 },
-  { label: 'Evidence Quality', score: 7.8 },
-  { label: 'Rebuttal Strength', score: 8.9 },
-  { label: 'Tone & Conduct', score: 9.5 },
+  { label: 'LOGIC', score: 92 },
+  { label: 'EVIDENCE', score: 88 },
+  { label: 'RHETORIC', score: 75 },
+  { label: 'REBUTTAL', score: 95 },
+  { label: 'CLARITY', score: 82 },
 ];
 
-function MockScoreBar({ label, score, delay }: { label: string; score: number; delay: number }) {
-  return (
-    <div className={styles.scoreItem}>
-      <div className={styles.scoreHeader}>
-        <span className={styles.scoreLabel}>{label}</span>
-        <span className={styles.scoreValue}>{score}/10</span>
-      </div>
-      <div className={styles.scoreTrack}>
-        <motion.div
-          initial={{ width: 0 }}
-          whileInView={{ width: `${score * 10}%` }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay, ease: "easeOut" }}
-          className={styles.scoreBar}
-        />
-      </div>
-    </div>
-  );
-}
+const bulletPoints = [
+  'Logical consistency and soundness',
+  'Factual accuracy and source quality',
+  'Directness of rebuttals',
+  'Absence of logical fallacies',
+  'Persuasive rhetoric'
+];
 
-export default function AIJudgeSection() {
+const AIJudgeSection: React.FC = () => {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <div className={styles.grid}>
-          {/* Left Content */}
-          <div className={styles.left}>
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className={styles.eyebrow}
-            >
-              THE AI JUDGE
-            </motion.span>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className={styles.title}
-            >
-              An impartial verdict.<br />Every time.
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className={styles.desc}
-            >
-              DebateArena uses Gemini 1.5 Pro to evaluate every argument. 
-              No personal bias, no emotional interference—just pure analysis of logic and evidence.
-            </motion.p>
-
-            <motion.ul
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className={styles.list}
-            >
-              {[
-                'Evaluates clarity and structural integrity',
-                'Detects logical fallacies in real-time',
-                'Weights the quality of cited evidence',
-                'Analyzes rebuttal relevance and strength',
-                'Considers conduct and adherence to rules',
-              ].map((item, i) => (
-                <li key={i} className={styles.listItem}>
-                  <div className={styles.checkContainer}>
-                    <Check size={12} className={styles.checkIcon} />
-                  </div>
-                  <span className={styles.listItemText}>{item}</span>
-                </li>
-              ))}
-            </motion.ul>
+        {/* Left Side: Copy */}
+        <motion.div 
+          className={styles.leftContent}
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
+          <div className={styles.eyebrow}>THE AI JUDGE</div>
+          <h2 className={styles.heading}>An impartial verdict.<br/>Every time.</h2>
+          <p className={styles.bodyCopy}>
+            No more endless arguments that go nowhere. Our specialized AI models act as the ultimate arbiter, evaluating both sides on a strict rubric to declare a definitive winner.
+          </p>
+          <div className={styles.bulletList}>
+            {bulletPoints.map((point, i) => (
+              <div key={i} className={styles.bulletItem}>
+                <CheckCircle2 size={18} color="var(--accent)" />
+                {point}
+              </div>
+            ))}
           </div>
+        </motion.div>
 
-          {/* Right Mock Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className={styles.right}
-          >
-            {/* Glow effect */}
-            <div className={styles.glow} />
-            
-            <div className={styles.card}>
-              <div className={styles.cardHeader}>
-                <div>
-                  <h3 className={styles.cardTitle}>Final Verdict</h3>
-                  <p className={styles.cardId}>Session #8291</p>
-                </div>
-                <div className={styles.cardScoreContainer}>
-                  <div className={styles.cardScore}>88.4</div>
-                  <div className={styles.cardScoreLabel}>AI AGGREGATE SCORE</div>
-                </div>
-              </div>
-
-              <div className={styles.scoreList}>
-                {criteria.map((item, i) => (
-                  <MockScoreBar
-                    key={i}
-                    label={item.label}
-                    score={item.score}
-                    delay={0.5 + i * 0.1}
+        {/* Right Side: Mock ScoreCard */}
+        <motion.div 
+          className={styles.scoreCard}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
+        >
+          <div className={styles.cardHeader}>
+            <span className={styles.cardTitle}>FINAL SCORE</span>
+            <span className={styles.cardScore}>86.4</span>
+          </div>
+          
+          <div className={styles.criteriaList}>
+            {criteria.map((item, index) => (
+              <div key={item.label} className={styles.criterionRow}>
+                <span className={styles.criterionLabel}>{item.label}</span>
+                <div className={styles.barTrack}>
+                  <motion.div 
+                    className={styles.barFill}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${item.score}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.0, delay: 0.4 + (index * 0.15), ease: 'easeOut' }}
                   />
-                ))}
-              </div>
-
-              <div className={styles.cardFooter}>
-                <div className={styles.footerContent}>
-                  <div className={styles.aiAvatar}>AI</div>
-                  <div>
-                    <p className={styles.footerText}>"The winner demonstrated superior evidence quality and rebutted all sub-questions with logical consistency."</p>
-                  </div>
                 </div>
+                <span className={styles.criterionScore}>{item.score}</span>
               </div>
-            </div>
-          </motion.div>
-        </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );
-}
+};
+
+export default AIJudgeSection;
