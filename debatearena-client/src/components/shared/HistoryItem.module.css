@@ -1,0 +1,81 @@
+.historyItem {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.historyItem:hover {
+  border-color: var(--border-strong);
+  transform: translateX(4px);
+}
+
+.mainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.topic {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.opponent {
+  display: flex;
+  gap: 6px;
+}
+
+.outcomeSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.eloSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+  justify-content: flex-end;
+}
+
+.eloChange {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.eloGain { color: var(--win); }
+.eloLoss { color: var(--loss); }
+.eloNeutral { color: var(--text-muted); }
+
+.outcomeBadge {
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  min-width: 80px;
+  text-align: center;
+}
+
+.outcomeWin { background-color: rgba(76, 175, 80, 0.1); color: var(--win); border: 1px solid rgba(76, 175, 80, 0.2); }
+.outcomeLoss { background-color: rgba(224, 92, 92, 0.1); color: var(--loss); border: 1px solid rgba(224, 92, 92, 0.2); }
+.outcomeNeutral { background-color: rgba(148, 163, 184, 0.1); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.2); }
