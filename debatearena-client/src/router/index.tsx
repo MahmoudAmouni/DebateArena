@@ -9,6 +9,10 @@ import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import HomePage from '../pages/home/HomePage';
+import MyDebatesPage from '../pages/debates/MyDebatesPage';
+import LeaderboardPage from '../pages/leaderboard/LeaderboardPage';
+import ProfilePage from '../pages/profile/ProfilePage';
+import EditProfilePage from '../pages/profile/EditProfilePage';
 import NotFoundPage from '../pages/misc/NotFoundPage';
 
 export const router = createBrowserRouter([
@@ -40,7 +44,22 @@ export const router = createBrowserRouter([
         path: '/home',
         element: <HomePage />,
       },
-      // Other protected routes will go here
+      {
+        path: '/debates',
+        element: <MyDebatesPage />,
+      },
+      {
+        path: '/leaderboard',
+        element: <LeaderboardPage />,
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+      },
+      {
+        path: '/profile/edit',
+        element: <EditProfilePage />,
+      },
     ],
   },
   {
