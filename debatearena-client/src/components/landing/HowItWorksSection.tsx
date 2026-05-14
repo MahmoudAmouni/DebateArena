@@ -1,105 +1,92 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import { PlusCircle, Users, MessageSquare, Award } from 'lucide-react';
+import { MessageSquare, Scale, Trophy, Users } from 'lucide-react';
 import styles from './HowItWorksSection.module.css';
 
 const steps = [
   {
-    icon: PlusCircle,
-    title: 'Create Session',
-    desc: 'Define your topic and 5 sub-questions. Choose your stance and invite an opponent.',
+    number: '1',
+    icon: <Users size={24} />,
+    title: 'Challenge an Opponent',
+    description: 'Create a public session or invite someone directly. Choose the debate format and topic.',
   },
   {
-    icon: Users,
-    title: 'Join & Lobby',
-    desc: 'Enter the lobby once your opponent is ready. Lock in your positions and prepare for battle.',
+    number: '2',
+    icon: <MessageSquare size={24} />,
+    title: 'Debate Live',
+    description: 'Enter the arena. Argue your points across 5 sub-questions in a structured, timed format.',
   },
   {
-    icon: MessageSquare,
-    title: 'Live Debate',
-    desc: 'Two intense phases: a live voice discussion followed by an AI-proctored writing round.',
+    number: '3',
+    icon: <Scale size={24} />,
+    title: 'AI Judgment',
+    description: 'The impartial AI judge analyzes both sides for logic, evidence, and rhetoric to determine a winner.',
   },
   {
-    icon: Award,
-    title: 'AI Verdict',
-    desc: 'Receive a point-by-point breakdown and a final winner declared by the AI Judge.',
+    number: '4',
+    icon: <Trophy size={24} />,
+    title: 'Climb the Ranks',
+    description: 'Earn ELO points for your victories and climb the global leaderboard to Diamond tier.',
   },
 ];
 
-export default function HowItWorksSection() {
+const HowItWorksSection: React.FC = () => {
   return (
-    <section id="how" className={styles.section}>
-      <div className={styles.container}>
-        {/* Section Header */}
-        <div className={styles.header}>
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className={styles.eyebrow}
-          >
-            THE PROCESS
-          </motion.span>
-          <motion.h2
+    <section className={styles.section}>
+      <motion.div
+        className={styles.eyebrow}
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        HOW IT WORKS
+      </motion.div>
+      <motion.h2
+        className={styles.heading}
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.1 }}
+      >
+        The Path to Victory
+      </motion.h2>
+
+      <div className={styles.timeline}>
+        {/* Animated Connecting Line */}
+        <div className={styles.lineContainer}>
+          <svg width="100%" height="0" preserveAspectRatio="none">
+            <motion.line
+              x1="0"
+              y1="1"
+              x2="100%"
+              y2="1"
+              className={styles.animatedLine}
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, ease: 'easeOut' }}
+            />
+          </svg>
+        </div>
+
+        {steps.map((step, index) => (
+          <motion.div
+            key={step.number}
+            className={styles.step}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className={styles.title}
+            transition={{ delay: index * 0.15 + 0.3 }}
           >
-            How It Works
-          </motion.h2>
-        </div>
-
-        <div className={styles.timeline}>
-          <div className={styles.line}>
-            <motion.div
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundColor: 'var(--accent)',
-                transformOrigin: 'top'
-              }}
-            />
-          </div>
-
-          <div className={styles.grid}>
-            {steps.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-                className={styles.step}
-              >
-                {/* Number Badge */}
-                <div className={styles.badge}>
-                  {i + 1}
-                </div>
-
-                {/* Horizontal Content */}
-                <div className={styles.contentWrapper}>
-                  <div className={styles.iconContainer}>
-                    <step.icon size={28} className={styles.icon} />
-                  </div>
-                  <div className={styles.textGroup}>
-                    <h3 className={styles.stepTitle}>
-                      {step.title}
-                    </h3>
-                    <p className={styles.stepDesc}>
-                      {step.desc}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+            <div className={styles.numberBadge}>{step.number}</div>
+            <div className={styles.icon}>{step.icon}</div>
+            <h3 className={styles.stepTitle}>{step.title}</h3>
+            <p className={styles.stepDesc}>{step.description}</p>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
-}
+};
+
+export default HowItWorksSection;
