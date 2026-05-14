@@ -18,9 +18,3 @@ yarn-error.log*
 .idea/
 .DS_Store
 
-# Documentation
-DebateArena_Backend_Plan.md
-DebateArena_Database.md
-DebateArena.md
-DebateArena_Implementation_Steps.md
-DebateArena.md
