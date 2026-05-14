@@ -1,0 +1,196 @@
+.heading {
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  height: 44px;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0 14px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.inputError {
+  border-color: rgba(224, 92, 92, 0.5);
+}
+
+.inputError:focus {
+  border-color: var(--loss);
+  box-shadow: 0 0 0 3px rgba(224, 92, 92, 0.08);
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.passwordToggle:hover {
+  color: var(--text-secondary);
+}
+
+/* Availability Indicator */
+.indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.indicatorDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+}
+
+.indicatorSuccess .indicatorDot {
+  background-color: var(--win);
+}
+.indicatorSuccess {
+  color: var(--win);
+}
+
+.indicatorError .indicatorDot {
+  background-color: var(--loss);
+}
+.indicatorError {
+  color: var(--loss);
+}
+
+/* Inline Error */
+.errorText {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--loss);
+  margin-top: 4px;
+}
+
+/* Age Confirmation Box */
+.ageCallout {
+  background-color: var(--accent-dim);
+  border-left: 3px solid var(--accent);
+  padding: 12px 14px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: var(--space-2);
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background-color: var(--surface-1);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid #0A0B0F;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.ageText {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
+.loginText {
+  text-align: center;
+  margin-top: var(--space-6);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.loginLink {
+  color: var(--accent);
+  transition: color 0.2s ease;
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+  color: var(--accent-bright);
+}

@@ -16,6 +16,7 @@ router.get('/me/debates', authenticate, usersController.getDebateHistory);
 router.get('/me/badges', authenticate, usersController.getBadges);
 router.get('/me/notifications', authenticate, usersController.getNotifications);
 router.patch('/me/notifications/:id/read', authenticate, usersController.markNotificationRead);
+router.patch('/me', authenticate, usersController.updateProfile);
 router.post('/:id/block', authenticate, usersController.blockUser);
 router.delete('/:id/block', authenticate, usersController.unblockUser);
 router.get('/:username', usersController.getPublicProfile);

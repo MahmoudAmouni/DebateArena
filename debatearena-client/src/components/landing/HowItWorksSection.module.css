@@ -1,0 +1,108 @@
+.section {
+  background-color: var(--bg);
+  padding: var(--space-32) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: var(--space-4);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 44px;
+  color: var(--text-primary);
+  margin-bottom: var(--space-16);
+  text-align: center;
+}
+
+.timeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.lineContainer {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+  right: 50px;
+  height: 1px;
+  background: var(--border-strong);
+  z-index: 0;
+}
+
+.animatedLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  stroke: var(--accent);
+  stroke-width: 2px;
+}
+
+.step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 200px;
+}
+
+.numberBadge {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+}
+
+.icon {
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.stepTitle {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.stepDesc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .timeline {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-10);
+  }
+  .lineContainer {
+    display: none;
+  }
+}

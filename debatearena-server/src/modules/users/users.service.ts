@@ -73,4 +73,15 @@ export class UsersService {
   async unblockUser(blockerId: string, blockedId: string) {
     return this.usersRepository.deleteBlock(blockerId, blockedId);
   }
+
+  async updateProfile(userId: string, data: { username?: string; bio?: string; avatarUrl?: string }) {
+    if (data.username) {
+      const existing = await this.usersRepository.findByUsername(data.username);
+      if (existing && existing.id !== userId) {
+        throw new ConflictError('Username already taken', 'USERNAME_TAKEN');
+      }
+    }
+    const updatedUser = await this.usersRepository.update(userId, data);
+    return this.stripPassword(updatedUser);
+  }
 }

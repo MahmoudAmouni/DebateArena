@@ -92,4 +92,13 @@ export class UsersController {
       return sendSuccess(res, { unblocked: true });
     } catch (error) { next(error); }
   };
+
+  updateProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) throw new UnauthorizedError('Authentication required');
+      const updatedUser = await this.usersService.updateProfile(userId, req.body);
+      return sendSuccess(res, updatedUser);
+    } catch (error) { next(error); }
+  };
 }

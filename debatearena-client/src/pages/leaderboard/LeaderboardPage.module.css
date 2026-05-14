@@ -1,0 +1,167 @@
+.container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+/* Table Wrapper */
+.tableWrapper {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.thead {
+  background-color: var(--surface-2);
+}
+
+.th {
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--border);
+}
+
+.tr {
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.2s ease;
+}
+
+.tr:last-child {
+  border-bottom: none;
+}
+
+.tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Current User Highlighting */
+.currentUserRow {
+  background-color: rgba(201, 168, 76, 0.06);
+  border-left: 3px solid var(--accent);
+}
+
+.currentUserRow:hover {
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.td {
+  padding: var(--space-4) var(--space-6);
+  vertical-align: middle;
+}
+
+/* Rank Column */
+.rankCell {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.rank1 { color: #C9A84C; font-size: 18px; } /* Gold */
+.rank2 { color: #A8B2C0; font-size: 16px; } /* Silver */
+.rank3 { color: #CD7F32; font-size: 15px; } /* Bronze */
+
+/* Debater Column */
+.debaterCell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+
+.name {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.name:hover {
+  color: var(--accent);
+}
+
+/* ELO Column */
+.eloCell {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Win Rate Column */
+.winRateCell {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--win);
+  font-weight: 500;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .container {
+    padding: 0;
+  }
+  
+  .th:nth-child(4), .td:nth-child(4) {
+    display: none; /* Hide Win Rate on mobile */
+  }
+
+  .tableWrapper {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
