@@ -1,241 +1,169 @@
 .section {
-  padding: 6rem 0;
   background-color: var(--bg);
+  padding: var(--space-24) var(--space-8);
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  max-width: 1100px;
+  width: 100%;
+  align-items: center;
+}
+
+.leftContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 44px;
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+  line-height: 1.1;
+}
+
+.bodyCopy {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-6);
+}
+
+.bulletList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.bulletItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Right Side - ScoreCard */
+.scoreCard {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
   position: relative;
   overflow: hidden;
 }
 
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  width: 100%;
-}
-
-.grid {
-  display: grid;
-  grid-template-cols: 1fr;
-  gap: 5rem;
-  align-items: center;
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-cols: 1fr 1fr;
-  }
-}
-
-.left {
-  max-width: 36rem;
-}
-
-.eyebrow {
-  display: inline-block;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent-gold);
-  margin-bottom: 1rem;
-}
-
-.title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.75rem;
-  font-weight: 900;
-  color: var(--text-primary);
-  margin-bottom: 2rem;
-  line-height: 1.2;
-}
-
-@media (min-width: 768px) {
-  .title {
-    font-size: 3rem;
-  }
-}
-
-.desc {
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text-secondary);
-  font-size: 1.125rem;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-}
-
-.list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.listItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  color: rgba(240, 237, 232, 0.8);
-}
-
-.checkContainer {
-  margin-top: 0.25rem;
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 50%;
-  background: var(--accent-dim);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.checkIcon {
-  color: var(--accent-gold);
-}
-
-.listItemText {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-}
-
-.right {
-  position: relative;
-}
-
-.glow {
+/* Subtle glow behind the card */
+.scoreCard::before {
+  content: '';
   position: absolute;
-  inset: -1rem;
-  background: rgba(201, 168, 76, 0.05);
-  filter: blur(32px);
-  z-index: -10;
-  border-radius: 50%;
-}
-
-.card {
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-top: 2px solid var(--accent-gold);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  top: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.15), transparent 70%);
+  border-radius: var(--radius-full);
+  pointer-events: none;
 }
 
 .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+  align-items: flex-end;
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-4);
 }
 
 .cardTitle {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.25rem;
-}
-
-.cardId {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.cardScoreContainer {
-  text-align: right;
-}
-
-.cardScore {
-  font-family: 'DM Mono', monospace;
-  font-size: 1.875rem;
-  color: var(--accent-gold);
-}
-
-.cardScoreLabel {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: -0.05em;
-}
-
-.scoreList {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.scoreItem {
-  margin-bottom: 1rem;
-}
-
-.scoreHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.375rem;
-}
-
-.scoreLabel {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-}
-
-.scoreValue {
-  font-family: 'DM Mono', monospace;
-  font-size: 13px;
-  color: var(--accent-gold);
-}
-
-.scoreTrack {
-  height: 0.375rem;
-  background: var(--surface-2);
-  border-radius: 9999px;
-  overflow: hidden;
-}
-
-.scoreBar {
-  height: 100%;
-  background: var(--accent-gold);
-}
-
-.cardFooter {
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-strong);
-}
-
-.footerContent {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.aiAvatar {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background: var(--accent-dim);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent-gold);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.875rem;
-}
-
-.footerText {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
   font-weight: 600;
+}
+
+.cardScore {
+  font-family: var(--font-mono);
+  font-size: 48px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.criteriaList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.criterionRow {
+  display: grid;
+  grid-template-columns: 100px 1fr 30px;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.criterionLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.barTrack {
+  height: 6px;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.barFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.3), var(--accent));
+  border-radius: var(--radius-full);
+}
+
+.criterionScore {
+  font-family: var(--font-mono);
+  font-size: 14px;
   color: var(--text-primary);
-  font-style: italic;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .leftContent {
+    text-align: center;
+    align-items: center;
+  }
 }
