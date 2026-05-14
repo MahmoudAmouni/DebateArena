@@ -58,11 +58,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const setUser = useCallback((user: User, accessToken: string) => {
     setAuthToken(accessToken);
+    localStorage.setItem('accessToken', accessToken);
     dispatch({ type: 'SET_USER', payload: { user, accessToken } });
   }, []);
 
   const clearAuth = useCallback(() => {
     setAuthToken(null);
+    localStorage.removeItem('accessToken');
     dispatch({ type: 'CLEAR_AUTH' });
   }, []);
 
@@ -70,19 +72,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     dispatch({ type: 'SET_LOADING', payload: isLoading });
   }, []);
 
-  // On mount, try to refresh the token to see if we're already logged in
+  // On mount, try to restore session or refresh
   useEffect(() => {
     const initAuth = async () => {
+      const savedToken = localStorage.getItem('accessToken');
+      
+      if (savedToken) {
+        setAuthToken(savedToken);
+        try {
+          const profileResponse = await api.get('/users/me');
+          if (profileResponse.data) {
+            setUser(profileResponse.data, savedToken);
+            setLoading(false);
+            return;
+          }
+        } catch (error) {
+          console.warn('Session restoration failed, trying refresh...');
+        }
+      }
+
       try {
         const response = await api.post('/auth/refresh');
         if (response.data && response.data.accessToken) {
-          // We got a new access token, now fetch the user profile if not included
-          // For now, assume the refresh response might include the user or we fetch it
           const accessToken = response.data.accessToken;
           setAuthToken(accessToken);
+          localStorage.setItem('accessToken', accessToken);
           
-          // Fetch user profile
-          const profileResponse = await api.get('/users/me'); // Assuming this endpoint exists
+          const profileResponse = await api.get('/users/me');
           if (profileResponse.data) {
             setUser(profileResponse.data, accessToken);
           } else {
