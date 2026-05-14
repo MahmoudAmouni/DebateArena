@@ -52,6 +52,20 @@ export const useAuth = () => {
     }
   }, [clearAuth, navigate]);
 
+  const updateProfile = useCallback(async (data: { username?: string; bio?: string; avatarUrl?: string }) => {
+    try {
+      const response = await api.patch('/users/me', data);
+      const updatedUser = response.data.data;
+      setUser(updatedUser, accessToken); // Update context with same token
+      toast.success('Profile updated successfully!');
+      return updatedUser;
+    } catch (error: any) {
+      const message = error.message || 'Failed to update profile.';
+      toast.error(message);
+      throw error;
+    }
+  }, [accessToken, setUser]);
+
   return {
     user,
     accessToken,
@@ -60,5 +74,6 @@ export const useAuth = () => {
     login,
     register,
     logout,
+    updateProfile,
   };
 };
