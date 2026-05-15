@@ -25,11 +25,9 @@ Two users debate a topic across **5 sub-questions**. Claude AI fact-checks in re
 
 ## Screenshots
 
-**Login**
-![Login](Readme/login.png)
-
-**Sign Up**
-![Sign Up](Readme/signup.png)
+| Login | Sign Up |
+|---|---|
+| ![Login](Readme/login.png) | ![Sign Up](Readme/signup.png) |
 
 **Home**
 ![Home](Readme/home.png)
