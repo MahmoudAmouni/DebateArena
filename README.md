@@ -111,3 +111,9 @@ CLIENT_URL=http://localhost:5173
 VITE_API_URL=http://localhost:3000/api
 VITE_SOCKET_URL=http://localhost:3000
 ```
+
+---
+
+## License
+
+[MIT](./LICENSE)
